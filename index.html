@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Client Discovery Simulator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#0c4a6e' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    [x-cloak] { display: none !important; }
+    .card-option { transition: all 0.15s ease; }
+    .card-option:hover { transform: translateY(-2px); }
+    .card-option.selected { box-shadow: 0 0 0 2px #0ea5e9; }
+    .fade-in { animation: fadeIn 0.3s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans text-slate-800">
+
+<div x-data="simulator()" x-cloak>
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-brand-900 to-brand-700 text-white py-10 px-6 text-center shadow-lg">
+    <div class="max-w-4xl mx-auto">
+      <p class="text-brand-100 text-sm font-semibold tracking-widest uppercase mb-2">AI Strategy Tool</p>
+      <h1 class="text-4xl font-bold mb-3">Client Discovery Simulator</h1>
+      <p class="text-brand-100 text-lg max-w-2xl mx-auto">Select your industry, goal, and AI technology to generate a tailored strategy brief in seconds.</p>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-10">
+
+    <!-- Wizard -->
+    <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-8">
+      <h2 class="text-xl font-bold text-slate-700 mb-6 flex items-center gap-2">
+        <span class="bg-brand-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold">1</span>
+        Discovery Wizard
+      </h2>
+
+      <div class="grid md:grid-cols-3 gap-6">
+
+        <!-- Step 1: Industry -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-600 mb-2">Industry</label>
+          <div class="space-y-2">
+            <template x-for="item in industries" :key="item">
+              <button
+                @click="industry = item; checkReset()"
+                :class="industry === item ? 'selected bg-brand-50 border-brand-500 text-brand-700 font-semibold' : 'border-slate-200 hover:border-brand-300 text-slate-700'"
+                class="card-option w-full text-left px-4 py-2.5 rounded-xl border-2 text-sm transition-colors"
+                x-text="item">
+              </button>
+            </template>
+          </div>
+        </div>
+
+        <!-- Step 2: Goal -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-600 mb-2">Primary Goal</label>
+          <div class="space-y-2">
+            <template x-for="item in goals" :key="item">
+              <button
+                @click="goal = item; checkReset()"
+                :class="goal === item ? 'selected bg-brand-50 border-brand-500 text-brand-700 font-semibold' : 'border-slate-200 hover:border-brand-300 text-slate-700'"
+                class="card-option w-full text-left px-4 py-2.5 rounded-xl border-2 text-sm transition-colors"
+                x-text="item">
+              </button>
+            </template>
+          </div>
+        </div>
+
+        <!-- Step 3: AI Tech -->
+        <div>
+          <label class="block text-sm font-semibold text-slate-600 mb-2">AI Technology</label>
+          <div class="space-y-2">
+            <template x-for="item in technologies" :key="item">
+              <button
+                @click="tech = item; checkReset()"
+                :class="tech === item ? 'selected bg-brand-50 border-brand-500 text-brand-700 font-semibold' : 'border-slate-200 hover:border-brand-300 text-slate-700'"
+                class="card-option w-full text-left px-4 py-2.5 rounded-xl border-2 text-sm transition-colors"
+                x-text="item">
+              </button>
+            </template>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Generate button -->
+      <div class="mt-8 flex justify-center">
+        <button
+          @click="generate()"
+          :disabled="!industry || !goal || !tech"
+          :class="!industry || !goal || !tech ? 'bg-slate-300 cursor-not-allowed text-slate-400' : 'bg-brand-600 hover:bg-brand-700 text-white shadow-md hover:shadow-lg'"
+          class="px-10 py-3 rounded-xl font-bold text-base transition-all duration-150">
+          Generate Strategy Brief
+        </button>
+      </div>
+    </section>
+
+    <!-- Output Dashboard -->
+    <div x-show="generated" x-transition class="space-y-6 fade-in">
+
+      <!-- Header bar -->
+      <div class="bg-gradient-to-r from-brand-600 to-brand-500 rounded-2xl p-6 text-white">
+        <p class="text-brand-100 text-xs font-semibold tracking-widest uppercase mb-1">Strategy Brief</p>
+        <h2 class="text-2xl font-bold" x-text="output.summary"></h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <!-- Component B: User Story -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="text-2xl">📋</span>
+            <h3 class="font-bold text-slate-700 text-lg">Sample User Story</h3>
+          </div>
+          <blockquote class="border-l-4 border-brand-400 pl-4 text-slate-600 italic text-sm leading-relaxed" x-text="output.userStory"></blockquote>
+        </div>
+
+        <!-- Component D: ROI -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="text-2xl">📈</span>
+            <h3 class="font-bold text-slate-700 text-lg">Theoretical ROI Metric</h3>
+          </div>
+          <div class="bg-brand-50 rounded-xl p-4 border border-brand-100">
+            <p class="text-brand-700 font-semibold text-sm leading-relaxed" x-text="output.roi"></p>
+          </div>
+          <p class="text-slate-400 text-xs mt-3">* Estimates based on industry benchmarks. Actual results vary.</p>
+        </div>
+
+      </div>
+
+      <!-- Component C: Roadmap -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div class="flex items-center gap-2 mb-6">
+          <span class="text-2xl">🗺️</span>
+          <h3 class="font-bold text-slate-700 text-lg">Mock 3-Month Roadmap</h3>
+        </div>
+        <div class="grid md:grid-cols-3 gap-4">
+          <template x-for="(month, index) in output.roadmap" :key="index">
+            <div class="relative">
+              <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 h-full">
+                <div class="flex items-center gap-2 mb-3">
+                  <span class="bg-brand-500 text-white text-xs font-bold px-2 py-1 rounded-full" x-text="'Month ' + (index + 1)"></span>
+                </div>
+                <p class="font-semibold text-slate-700 text-sm mb-2" x-text="month.title"></p>
+                <p class="text-slate-500 text-xs leading-relaxed" x-text="month.detail"></p>
+              </div>
+              <template x-if="index < 2">
+                <div class="hidden md:block absolute top-1/2 -right-2 transform -translate-y-1/2 z-10">
+                  <svg class="w-4 h-4 text-brand-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+                </div>
+              </template>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Reset -->
+      <div class="text-center pt-2 pb-6">
+        <button @click="reset()" class="text-brand-600 hover:text-brand-800 text-sm font-semibold underline underline-offset-2 transition-colors">
+          ← Start Over
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Empty state prompt -->
+    <div x-show="!generated" class="text-center py-16 text-slate-400">
+      <div class="text-6xl mb-4">🧠</div>
+      <p class="text-lg font-medium">Select all three options above to generate your strategy brief.</p>
+    </div>
+
+  </main>
+
+  <footer class="text-center text-slate-400 text-xs py-6 border-t border-slate-200">
+    AI Client Discovery Simulator &mdash; Demo Page
+  </footer>
+
+</div>
+
+<script>
+function simulator() {
+  return {
+    industries: [
+      'Healthcare','Logistics','Fintech','Manufacturing',
+      'Environmental','Non-Profit','E-commerce & Retail','Media & Entertainment'
+    ],
+    goals: [
+      'Reduce operational costs',
+      'Automate manual workflows',
+      'Drive new revenue streams',
+      'Ensure regulatory compliance',
+      'Improve data-driven decision making',
+      'Enhance customer personalization & retention'
+    ],
+    technologies: [
+      'Generative AI (LLMs)',
+      'Conversational AI (NLP)',
+      'Computer Vision',
+      'Predictive Machine Learning',
+      'AI Workflow Automation'
+    ],
+
+    industry: '',
+    goal: '',
+    tech: '',
+    generated: false,
+    output: {},
+
+    checkReset() {
+      if (this.generated) { this.generated = false; this.output = {}; }
+    },
+
+    reset() {
+      this.industry = ''; this.goal = ''; this.tech = '';
+      this.generated = false; this.output = {};
+    },
+
+    generate() {
+      if (!this.industry || !this.goal || !this.tech) return;
+      this.output = {
+        summary: this.buildSummary(),
+        userStory: this.buildUserStory(),
+        roadmap: this.buildRoadmap(),
+        roi: this.buildROI()
+      };
+      this.generated = true;
+      this.$nextTick(() => {
+        document.querySelector('[x-show="generated"]')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    },
+
+    buildSummary() {
+      const techShort = this.tech.replace(/\s*\(.*?\)/g, '').trim();
+      return `A strategic initiative leveraging ${techShort} to ${this.goal.toLowerCase()} within the ${this.industry} sector.`;
+    },
+
+    buildUserStory() {
+      const personas = {
+        'Healthcare': 'Clinical Operations Director',
+        'Logistics': 'Supply Chain Manager',
+        'Fintech': 'Compliance Officer',
+        'Manufacturing': 'Plant Operations Manager',
+        'Environmental': 'Sustainability Program Lead',
+        'Non-Profit': 'Program Director',
+        'E-commerce & Retail': 'Merchandising Manager',
+        'Media & Entertainment': 'Content Strategy Director'
+      };
+
+      const techActions = {
+        'Generative AI (LLMs)': 'use Generative AI to automatically draft and personalize',
+        'Conversational AI (NLP)': 'deploy Conversational AI to intelligently parse and respond to',
+        'Computer Vision': 'apply Computer Vision to automatically detect and classify',
+        'Predictive Machine Learning': 'leverage Predictive ML models to forecast and act on',
+        'AI Workflow Automation': 'implement AI Workflow Automation to streamline and orchestrate'
+      };
+
+      const goalOutcomes = {
+        'Reduce operational costs': 'significantly reduce manual overhead and operational expenditures',
+        'Automate manual workflows': 'eliminate repetitive manual processes and free up high-value team time',
+        'Drive new revenue streams': 'unlock new revenue opportunities through higher conversion and engagement',
+        'Ensure regulatory compliance': 'maintain continuous regulatory compliance with less manual review',
+        'Improve data-driven decision making': 'accelerate decision cycles backed by reliable, real-time insights',
+        'Enhance customer personalization & retention': 'deliver hyper-personalized experiences that improve retention'
+      };
+
+      const dataNouns = {
+        'Healthcare': 'patient records and clinical data',
+        'Logistics': 'shipment and route data',
+        'Fintech': 'transaction and communication logs',
+        'Manufacturing': 'production and sensor telemetry',
+        'Environmental': 'environmental monitoring datasets',
+        'Non-Profit': 'donor and program impact data',
+        'E-commerce & Retail': 'product catalog and customer behavior data',
+        'Media & Entertainment': 'content performance and audience engagement data'
+      };
+
+      const persona = personas[this.industry] || 'Business Leader';
+      const action = techActions[this.tech] || 'apply AI to process';
+      const outcome = goalOutcomes[this.goal] || 'achieve key business objectives';
+      const data = dataNouns[this.industry] || 'core business data';
+
+      return `As a ${persona}, I want to ${action} ${data}, so that I can ${outcome}.`;
+    },
+
+    buildRoadmap() {
+      const m1Details = {
+        'Generative AI (LLMs)': 'Audit existing data sources; set up vector database and begin prompt engineering for core use cases.',
+        'Conversational AI (NLP)': 'Map conversation flows; collect and label training dialogue datasets; establish NLP pipeline.',
+        'Computer Vision': 'Define image taxonomy; build image labeling pipeline; source and tag initial training dataset.',
+        'Predictive Machine Learning': 'Identify key prediction targets; conduct feature engineering; establish baseline statistical models.',
+        'AI Workflow Automation': 'Document current process maps; identify automation triggers; select orchestration platform.'
+      };
+
+      const m2Details = {
+        'Generative AI (LLMs)': 'Fine-tune or RAG-integrate LLM with internal knowledge base; build MVP interface for user testing.',
+        'Conversational AI (NLP)': 'Train initial NLP model; integrate conversational interface into existing customer or internal touchpoints.',
+        'Computer Vision': 'Train vision model on labeled dataset; build MVP integration layer with operational systems.',
+        'Predictive Machine Learning': 'Train and validate predictive models; integrate scoring into operational dashboard or API.',
+        'AI Workflow Automation': 'Configure automation workflows; connect to existing tools via APIs; deploy internal pilot with select team.'
+      };
+
+      const m3Focus = {
+        'Reduce operational costs': 'testing against historical cost-reduction benchmarks and validating efficiency KPIs',
+        'Automate manual workflows': 'measuring workflow throughput improvements and error-rate reduction vs. manual baseline',
+        'Drive new revenue streams': 'A/B testing conversion uplift and tracking revenue attribution metrics',
+        'Ensure regulatory compliance': 'stress-testing audit accuracy and validating compliance reporting speed improvements',
+        'Improve data-driven decision making': 'validating forecast accuracy and decision-cycle acceleration with stakeholder sign-off',
+        'Enhance customer personalization & retention': 'measuring engagement lift, churn reduction, and personalization relevance scores'
+      };
+
+      return [
+        {
+          title: 'Strategy & Data Infrastructure',
+          detail: m1Details[this.tech] || 'Assess data readiness; define success metrics; establish cloud infrastructure and team roles.'
+        },
+        {
+          title: 'Model Training & MVP Build',
+          detail: m2Details[this.tech] || 'Build and validate core AI model; develop MVP and integrate with existing workflows.'
+        },
+        {
+          title: 'UAT, Optimization & Launch',
+          detail: `Conduct user acceptance testing with focus on ${m3Focus[this.goal] || 'key success criteria'}. Iterate on model performance, finalize documentation, and execute production launch.`
+        }
+      ];
+    },
+
+    buildROI() {
+      const roiMap = {
+        'Reduce operational costs': 'Estimated 25–40% reduction in manual processing hours, yielding measurable cost savings within the first two quarters post-launch.',
+        'Automate manual workflows': 'Estimated 25–40% reduction in manual processing hours and a projected 60% decrease in error rates from human data entry.',
+        'Drive new revenue streams': 'Targeting a 15–20% uplift in user conversion rates and a 10–15% increase in average order or engagement value.',
+        'Ensure regulatory compliance': 'Achieving 99.9% audit trail accuracy and accelerating compliance reporting cycles by 3x versus current manual processes.',
+        'Improve data-driven decision making': 'Compressing insight-to-decision cycles by 50% and achieving 3x faster reporting cadence for executive stakeholders.',
+        'Enhance customer personalization & retention': 'Targeting a 15–20% improvement in customer retention rate and a measurable uplift in Net Promoter Score (NPS) within 6 months.'
+      };
+      return roiMap[this.goal] || 'Significant efficiency and value creation expected. Metrics to be defined during discovery phase.';
+    }
+  }
+}
+</script>
+
+</body>
+</html>
