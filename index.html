@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Client Discovery Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="theme.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script>
@@ -11,7 +15,29 @@
       theme: {
         extend: {
           colors: {
-            brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 900: '#0c4a6e' }
+            brand: {
+              50:  'var(--color-primary-lighter)',
+              100: 'var(--color-primary-light)',
+              200: 'var(--color-accent-border)',
+              300: 'var(--color-primary)',
+              400: 'var(--color-primary)',
+              500: 'var(--color-primary)',
+              600: 'var(--color-primary-hover)',
+              700: 'var(--color-primary-active)',
+              800: 'var(--color-primary-active)',
+              900: 'var(--color-secondary)'
+            },
+            page:    'var(--color-bg-page)',
+            card:    'var(--color-bg-card)',
+            section: 'var(--color-bg-section)',
+            ink:     'var(--color-text-body)',
+            'ink-heading':   'var(--color-text-heading)',
+            'ink-secondary': 'var(--color-text-secondary)',
+            'ink-muted':     'var(--color-text-muted)',
+            'soft-border':   'var(--color-border)'
+          },
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif']
           }
         }
       }
@@ -20,21 +46,21 @@
   <style>
     [x-cloak] { display: none !important; }
     .card-option { transition: all 0.15s ease; }
-    .card-option:hover { transform: translateY(-1px); }
+    .card-option:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
     .results-fade { animation: fadeUp 0.35s ease-out; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
-<body class="bg-slate-50 min-h-screen font-sans text-slate-800">
+<body class="bg-page min-h-screen font-sans">
 
 <div x-data="simulator()" x-cloak>
 
   <!-- Header -->
-  <header class="bg-gradient-to-r from-brand-900 to-brand-700 text-white py-10 px-6 text-center shadow-lg">
+  <header class="app-header py-12 px-6 text-center">
     <div class="max-w-4xl mx-auto">
-      <p class="text-brand-100 text-sm font-semibold tracking-widest uppercase mb-2">AI Strategy Tool</p>
-      <h1 class="text-4xl font-bold mb-3">Client Discovery Simulator</h1>
-      <p class="text-brand-100 text-lg max-w-2xl mx-auto">Answer three questions to generate a tailored AI strategy brief in seconds.</p>
+      <p class="eyebrow text-xs tracking-widest uppercase mb-3">AI Strategy Tool</p>
+      <h1 class="text-4xl md:text-5xl font-bold mb-3 text-white">Client Discovery Simulator</h1>
+      <p class="subtitle text-lg max-w-2xl mx-auto">Answer three questions to generate a tailored AI strategy brief in seconds.</p>
     </div>
   </header>
 
@@ -46,12 +72,12 @@
       x-transition:leave="transition ease-in duration-150"
       x-transition:leave-start="opacity-100"
       x-transition:leave-end="opacity-0"
-      class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-8">
+      class="surface-card rounded-2xl p-8 mb-8">
 
       <!-- Progress Bar -->
       <div class="relative mb-10">
         <!-- Track background -->
-        <div class="absolute top-[18px] left-[18px] right-[18px] h-0.5 bg-slate-200"></div>
+        <div class="absolute top-[18px] left-[18px] right-[18px] h-0.5 bg-soft-border"></div>
         <!-- Active fill -->
         <div
           class="absolute top-[18px] left-[18px] h-0.5 bg-brand-500 transition-all duration-500 ease-in-out"
@@ -64,34 +90,34 @@
           <!-- Step 1 -->
           <div class="flex flex-col items-center gap-2">
             <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300"
-                 :class="currentStep > 1 ? 'bg-brand-500 text-white' : currentStep === 1 ? 'bg-brand-500 text-white ring-4 ring-brand-100' : 'bg-white border-2 border-slate-200 text-slate-400'">
+                 :class="currentStep > 1 ? 'bg-brand-500 text-white' : currentStep === 1 ? 'bg-brand-500 text-white ring-4 ring-brand-100' : 'bg-card border-2 border-soft-border text-ink-muted'">
               <span x-show="currentStep > 1">✓</span>
               <span x-show="currentStep <= 1">1</span>
             </div>
             <span class="text-xs font-semibold transition-colors duration-300"
-                  :class="currentStep >= 1 ? 'text-brand-600' : 'text-slate-400'">Industry</span>
+                  :class="currentStep >= 1 ? 'text-brand-600' : 'text-ink-muted'">Industry</span>
           </div>
 
           <!-- Step 2 -->
           <div class="flex flex-col items-center gap-2">
             <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300"
-                 :class="currentStep > 2 ? 'bg-brand-500 text-white' : currentStep === 2 ? 'bg-brand-500 text-white ring-4 ring-brand-100' : 'bg-white border-2 border-slate-200 text-slate-400'">
+                 :class="currentStep > 2 ? 'bg-brand-500 text-white' : currentStep === 2 ? 'bg-brand-500 text-white ring-4 ring-brand-100' : 'bg-card border-2 border-soft-border text-ink-muted'">
               <span x-show="currentStep > 2">✓</span>
               <span x-show="currentStep <= 2">2</span>
             </div>
             <span class="text-xs font-semibold transition-colors duration-300"
-                  :class="currentStep >= 2 ? 'text-brand-600' : 'text-slate-400'">Primary Goal</span>
+                  :class="currentStep >= 2 ? 'text-brand-600' : 'text-ink-muted'">Primary Goal</span>
           </div>
 
           <!-- Step 3 -->
           <div class="flex flex-col items-center gap-2">
             <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300"
-                 :class="currentStep > 3 ? 'bg-brand-500 text-white' : currentStep === 3 ? 'bg-brand-500 text-white ring-4 ring-brand-100' : 'bg-white border-2 border-slate-200 text-slate-400'">
+                 :class="currentStep > 3 ? 'bg-brand-500 text-white' : currentStep === 3 ? 'bg-brand-500 text-white ring-4 ring-brand-100' : 'bg-card border-2 border-soft-border text-ink-muted'">
               <span x-show="currentStep > 3">✓</span>
               <span x-show="currentStep <= 3">3</span>
             </div>
             <span class="text-xs font-semibold transition-colors duration-300"
-                  :class="currentStep >= 3 ? 'text-brand-600' : 'text-slate-400'">AI Technology</span>
+                  :class="currentStep >= 3 ? 'text-brand-600' : 'text-ink-muted'">AI Technology</span>
           </div>
 
         </div>
@@ -99,9 +125,9 @@
 
       <!-- Step question + breadcrumb chips -->
       <div class="text-center mb-7">
-        <p class="text-xs text-slate-400 font-semibold tracking-widest uppercase mb-2"
+        <p class="text-xs text-ink-muted font-semibold tracking-widest uppercase mb-2"
            x-text="`Step ${currentStep} of 3`"></p>
-        <h3 class="text-2xl font-bold text-slate-700"
+        <h3 class="text-2xl font-bold text-ink-heading"
             x-text="stepQuestions[currentStep - 1]"></h3>
 
         <!-- Previously chosen selections shown as chips -->
@@ -114,7 +140,7 @@
           </template>
           <template x-if="currentStep > 2">
             <div class="flex items-center gap-2">
-              <span class="text-slate-300 text-sm">›</span>
+              <span class="text-ink-muted text-sm">›</span>
               <span class="inline-flex items-center gap-1.5 text-xs bg-brand-50 text-brand-700 border border-brand-100 rounded-full px-3 py-1 font-medium">
                 <span x-text="icons[goal]"></span>
                 <span x-text="goal"></span>
@@ -136,7 +162,7 @@
               @click="selectOption(item)"
               :class="industry === item
                 ? 'bg-brand-50 border-brand-500 text-brand-700 font-semibold'
-                : 'border-slate-200 hover:border-brand-300 hover:bg-slate-50 text-slate-700'"
+                : 'border-soft-border hover:border-brand-500 hover:bg-section text-ink'"
               class="card-option flex items-center gap-3 text-left px-4 py-3.5 rounded-xl border-2 text-sm transition-colors">
               <span class="text-xl flex-shrink-0" x-text="icons[item]"></span>
               <span x-text="item"></span>
@@ -157,7 +183,7 @@
               @click="selectOption(item)"
               :class="goal === item
                 ? 'bg-brand-50 border-brand-500 text-brand-700 font-semibold'
-                : 'border-slate-200 hover:border-brand-300 hover:bg-slate-50 text-slate-700'"
+                : 'border-soft-border hover:border-brand-500 hover:bg-section text-ink'"
               class="card-option flex items-center gap-3 text-left px-4 py-3.5 rounded-xl border-2 text-sm transition-colors">
               <span class="text-xl flex-shrink-0" x-text="icons[item]"></span>
               <span x-text="item"></span>
@@ -179,7 +205,7 @@
               :class="[
                 tech === item
                   ? 'bg-brand-50 border-brand-500 text-brand-700 font-semibold'
-                  : 'border-slate-200 hover:border-brand-300 hover:bg-slate-50 text-slate-700',
+                  : 'border-soft-border hover:border-brand-500 hover:bg-section text-ink',
                 i === technologies.length - 1 && technologies.length % 2 !== 0 ? 'col-span-2' : ''
               ]"
               class="card-option flex items-center gap-3 text-left px-4 py-3.5 rounded-xl border-2 text-sm transition-colors">
@@ -195,7 +221,7 @@
         <button
           x-show="currentStep > 1"
           @click="back()"
-          class="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 text-sm font-medium transition-colors">
+          class="btn-ghost flex items-center gap-1.5 text-sm font-medium transition-colors">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
           </svg>
@@ -209,51 +235,51 @@
     <div x-show="generated" class="space-y-6 results-fade">
 
       <!-- Header bar -->
-      <div class="bg-gradient-to-r from-brand-600 to-brand-500 rounded-2xl p-6 text-white">
-        <p class="text-brand-100 text-xs font-semibold tracking-widest uppercase mb-1">Strategy Brief</p>
-        <h2 class="text-2xl font-bold" x-text="output.summary"></h2>
+      <div class="summary-header rounded-2xl p-6">
+        <p class="eyebrow text-xs uppercase mb-1">Strategy Brief</p>
+        <h2 class="text-2xl font-bold text-white" x-text="output.summary"></h2>
       </div>
 
       <div class="grid md:grid-cols-2 gap-6">
 
         <!-- Component B: User Story -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div class="surface-card rounded-2xl p-6">
           <div class="flex items-center gap-2 mb-4">
             <span class="text-2xl">📋</span>
-            <h3 class="font-bold text-slate-700 text-lg">Sample User Story</h3>
+            <h3 class="font-bold text-ink-heading text-lg">Sample User Story</h3>
           </div>
-          <blockquote class="border-l-4 border-brand-400 pl-4 text-slate-600 italic text-sm leading-relaxed" x-text="output.userStory"></blockquote>
+          <blockquote class="border-l-4 border-brand-500 pl-4 text-ink-secondary italic text-sm leading-relaxed" x-text="output.userStory"></blockquote>
         </div>
 
         <!-- Component D: ROI -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div class="surface-card rounded-2xl p-6">
           <div class="flex items-center gap-2 mb-4">
             <span class="text-2xl">📈</span>
-            <h3 class="font-bold text-slate-700 text-lg">Theoretical ROI Metric</h3>
+            <h3 class="font-bold text-ink-heading text-lg">Theoretical ROI Metric</h3>
           </div>
-          <div class="bg-brand-50 rounded-xl p-4 border border-brand-100">
+          <div class="bg-brand-50 rounded-xl p-4 border border-brand-200">
             <p class="text-brand-700 font-semibold text-sm leading-relaxed" x-text="output.roi"></p>
           </div>
-          <p class="text-slate-400 text-xs mt-3">* Estimates based on industry benchmarks. Actual results vary.</p>
+          <p class="text-ink-muted text-xs mt-3">* Estimates based on industry benchmarks. Actual results vary.</p>
         </div>
 
       </div>
 
       <!-- Component C: Roadmap -->
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+      <div class="surface-card rounded-2xl p-6">
         <div class="flex items-center gap-2 mb-6">
           <span class="text-2xl">🗺️</span>
-          <h3 class="font-bold text-slate-700 text-lg">Mock 3-Month Roadmap</h3>
+          <h3 class="font-bold text-ink-heading text-lg">Mock 3-Month Roadmap</h3>
         </div>
         <div class="grid md:grid-cols-3 gap-4">
           <template x-for="(month, index) in output.roadmap" :key="index">
             <div class="relative">
-              <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 h-full">
+              <div class="surface-muted rounded-xl p-5 h-full">
                 <div class="flex items-center gap-2 mb-3">
                   <span class="bg-brand-500 text-white text-xs font-bold px-2 py-1 rounded-full" x-text="'Month ' + (index + 1)"></span>
                 </div>
-                <p class="font-semibold text-slate-700 text-sm mb-2" x-text="month.title"></p>
-                <p class="text-slate-500 text-xs leading-relaxed" x-text="month.detail"></p>
+                <p class="font-semibold text-ink-heading text-sm mb-2" x-text="month.title"></p>
+                <p class="text-ink-secondary text-xs leading-relaxed" x-text="month.detail"></p>
               </div>
               <template x-if="index < 2">
                 <div class="hidden md:block absolute top-1/2 -right-2 transform -translate-y-1/2 z-10">
@@ -278,7 +304,7 @@
 
   </main>
 
-  <footer class="text-center text-slate-400 text-xs py-6 border-t border-slate-200">
+  <footer class="app-footer text-center text-xs py-6">
     AI Client Discovery Simulator &mdash; Demo Page
   </footer>
 

@@ -1,0 +1,213 @@
+/* ============================================================
+   THEME DEFINITIONS
+   Edit values below to change the look across the entire page.
+   Color palette extracted from ninetwothree.co source:
+   - Primary: dark turquoise  #00CCCA  (--dark-turquoise)
+   - Gradient: purple→pink    #6D39EF → #E966E3  (with glow)
+   - Surfaces: dark headers, white text, subtle white dividers
+   ============================================================ */
+
+:root {
+
+  /* ---------- BRAND COLORS ---------- */
+  /* Primary brand color — turquoise from ninetwothree.co */
+  --color-primary:           #00CCCA;
+  --color-primary-hover:     #00B5B3;
+  --color-primary-active:    #007F7E;
+  --color-primary-light:     #E5FBFB;
+  --color-primary-lighter:   #F0FDFD;
+
+  /* Secondary brand color — purple (gradient start) */
+  --color-secondary:         #6D39EF;
+  --color-secondary-hover:   #5C2BD6;
+  --color-secondary-light:   #ECE4FE;
+
+  /* Tertiary accent — pink/magenta (gradient end) */
+  --color-accent-pink:       #E966E3;
+  --color-accent-magenta:    #C858B2;
+  --color-accent-purple-soft:#C5B9E4;
+
+  /* Signature gradient + glow */
+  --gradient-purple-pink:    linear-gradient(90deg, #6D39EF, #E966E3);
+  --gradient-pink-glow:      0 0 24px 0.5px rgba(233, 102, 227, 0.45);
+
+  /* ---------- PAGE BACKGROUNDS ---------- */
+  --color-bg-page:           #FAFAF7;
+  --color-bg-card:           #FFFFFF;
+  --color-bg-section:        #F5F5F2;
+  --color-bg-muted:          #F4F4F5;
+
+  /* ---------- HEADER (dark, matches ninetwothree.co) ---------- */
+  --color-header-bg-from:    #0A0A0B;
+  --color-header-bg-to:      #1F1F23;
+  --color-header-text:       #FFFFFF;
+  --color-header-text-muted: rgba(255, 255, 255, 0.65);
+  --color-header-eyebrow:    var(--color-primary);
+  --color-header-divider:    rgba(255, 255, 255, 0.20);
+
+  /* ---------- TEXT COLORS ---------- */
+  --color-text-heading:      #09090B;
+  --color-text-body:         #27272A;
+  --color-text-secondary:    #52525B;
+  --color-text-muted:        #A1A1AA;
+  --color-text-inverse:      #FFFFFF;
+  --color-text-link:         var(--color-primary-active);
+
+  /* ---------- BUTTONS ---------- */
+  /* Primary button — turquoise with dark text */
+  --color-btn-primary-bg:        var(--color-primary);
+  --color-btn-primary-bg-hover:  var(--color-primary-hover);
+  --color-btn-primary-text:      #0A0A0B;
+  --color-btn-primary-border:    transparent;
+
+  /* Secondary button — outlined */
+  --color-btn-secondary-bg:        #FFFFFF;
+  --color-btn-secondary-bg-hover:  var(--color-bg-section);
+  --color-btn-secondary-text:      #09090B;
+  --color-btn-secondary-border:    var(--color-border-strong);
+
+  /* Tertiary / ghost button (e.g. "Back") */
+  --color-btn-ghost-text:        var(--color-text-secondary);
+  --color-btn-ghost-text-hover:  var(--color-text-heading);
+
+  /* ---------- BORDERS ---------- */
+  --color-border:            #E4E4E7;
+  --color-border-strong:     #D4D4D8;
+  --color-border-active:     var(--color-primary);
+  --color-border-focus:      var(--color-primary);
+
+  /* ---------- STATE / ACCENT ---------- */
+  --color-accent-bg:         var(--color-primary-light);
+  --color-accent-border:     #B8F0EF;
+  --color-accent-text:       var(--color-primary-active);
+
+  /* ---------- TYPOGRAPHY ---------- */
+  --font-family-heading: 'Inter', 'Söhne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-body:    'Inter', 'Söhne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium:  500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:    700;
+
+  /* ---------- RADII ---------- */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-full: 9999px;
+
+  /* ---------- SHADOWS ---------- */
+  --shadow-sm: 0 1px 2px 0 rgba(9, 9, 11, 0.04);
+  --shadow-md: 0 4px 8px -2px rgba(9, 9, 11, 0.06), 0 2px 4px -2px rgba(9, 9, 11, 0.04);
+  --shadow-lg: 0 12px 24px -8px rgba(9, 9, 11, 0.10), 0 4px 8px -2px rgba(9, 9, 11, 0.04);
+  --shadow-header: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+body {
+  font-family: var(--font-family-body);
+  background-color: var(--color-bg-page);
+  color: var(--color-text-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-heading);
+  color: var(--color-text-heading);
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   COMPONENT CLASSES
+   ============================================================ */
+
+/* Page header — dark gradient with turquoise accent eyebrow */
+.app-header {
+  background: linear-gradient(135deg, var(--color-header-bg-from) 0%, var(--color-header-bg-to) 100%);
+  color: var(--color-header-text);
+  box-shadow: var(--shadow-header);
+  position: relative;
+  overflow: hidden;
+}
+/* Bottom hairline accent that hints at the brand gradient */
+.app-header::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: var(--gradient-purple-pink);
+  box-shadow: var(--gradient-pink-glow);
+  opacity: 0.85;
+}
+.app-header .eyebrow {
+  color: var(--color-header-eyebrow);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.18em;
+}
+.app-header .subtitle {
+  color: var(--color-header-text-muted);
+}
+
+/* Strategy Brief summary bar — uses the signature purple→pink gradient with glow */
+.summary-header {
+  background: var(--gradient-purple-pink);
+  color: var(--color-text-inverse);
+  box-shadow: var(--gradient-pink-glow);
+}
+.summary-header .eyebrow {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.18em;
+}
+
+/* Card surfaces */
+.surface-card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+.surface-muted {
+  background-color: var(--color-bg-section);
+  border: 1px solid var(--color-border);
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--color-btn-primary-bg);
+  color: var(--color-btn-primary-text);
+  font-weight: var(--font-weight-semibold);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-btn-primary-bg-hover);
+}
+
+.btn-secondary {
+  background-color: var(--color-btn-secondary-bg);
+  color: var(--color-btn-secondary-text);
+  border: 1px solid var(--color-btn-secondary-border);
+  font-weight: var(--font-weight-semibold);
+  transition: background-color 0.15s ease;
+}
+.btn-secondary:hover {
+  background-color: var(--color-btn-secondary-bg-hover);
+}
+
+.btn-ghost {
+  color: var(--color-btn-ghost-text);
+  font-weight: var(--font-weight-medium);
+  transition: color 0.15s ease;
+}
+.btn-ghost:hover {
+  color: var(--color-btn-ghost-text-hover);
+}
+
+/* Footer */
+.app-footer {
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
+}
