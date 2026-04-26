@@ -1,0 +1,182 @@
+/* ============================================================
+   THEME DEFINITIONS
+   Edit values below to change the look across the entire page.
+   All colors, fonts, radii, and shadows are defined here.
+   ============================================================ */
+
+:root {
+
+  /* ---------- BRAND COLORS ---------- */
+  /* Primary brand color — used for CTAs, active states, accents */
+  --color-primary:           #FF5A1F;
+  --color-primary-hover:     #E04714;
+  --color-primary-active:    #B8380F;
+  --color-primary-light:     #FFEDE5;
+  --color-primary-lighter:   #FFF6F1;
+
+  /* Secondary brand color — used for secondary actions */
+  --color-secondary:         #18181B;
+  --color-secondary-hover:   #27272A;
+  --color-secondary-light:   #F4F4F5;
+
+  /* ---------- PAGE BACKGROUNDS ---------- */
+  --color-bg-page:           #FAFAF7;
+  --color-bg-card:           #FFFFFF;
+  --color-bg-section:        #F4F4F0;
+  --color-bg-muted:          #F4F4F5;
+
+  /* ---------- HEADER ---------- */
+  --color-header-bg-from:    #0A0A0B;
+  --color-header-bg-to:      #1F1F23;
+  --color-header-text:       #FAFAF7;
+  --color-header-text-muted: #A1A1AA;
+  --color-header-eyebrow:    #FF5A1F;
+
+  /* ---------- TEXT COLORS ---------- */
+  --color-text-heading:      #09090B;
+  --color-text-body:         #27272A;
+  --color-text-secondary:    #52525B;
+  --color-text-muted:        #A1A1AA;
+  --color-text-inverse:      #FFFFFF;
+  --color-text-link:         var(--color-primary);
+
+  /* ---------- BUTTONS ---------- */
+  /* Primary button (main call-to-action) */
+  --color-btn-primary-bg:        var(--color-primary);
+  --color-btn-primary-bg-hover:  var(--color-primary-hover);
+  --color-btn-primary-text:      #FFFFFF;
+  --color-btn-primary-border:    transparent;
+
+  /* Secondary button (less prominent action) */
+  --color-btn-secondary-bg:        #FFFFFF;
+  --color-btn-secondary-bg-hover:  var(--color-secondary-light);
+  --color-btn-secondary-text:      var(--color-secondary);
+  --color-btn-secondary-border:    var(--color-border);
+
+  /* Tertiary / ghost button (text-only, e.g. "Back") */
+  --color-btn-ghost-text:        var(--color-text-secondary);
+  --color-btn-ghost-text-hover:  var(--color-text-heading);
+
+  /* ---------- BORDERS ---------- */
+  --color-border:            #E4E4E7;
+  --color-border-strong:     #D4D4D8;
+  --color-border-active:     var(--color-primary);
+  --color-border-focus:      var(--color-primary);
+
+  /* ---------- STATE / ACCENT ---------- */
+  --color-accent-bg:         var(--color-primary-light);
+  --color-accent-border:     #FFD4BD;
+  --color-accent-text:       var(--color-primary-active);
+
+  /* ---------- TYPOGRAPHY ---------- */
+  --font-family-heading: 'Inter', 'Söhne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-body:    'Inter', 'Söhne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium:  500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:    700;
+
+  /* ---------- RADII ---------- */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-full: 9999px;
+
+  /* ---------- SHADOWS ---------- */
+  --shadow-sm: 0 1px 2px 0 rgba(9, 9, 11, 0.04);
+  --shadow-md: 0 4px 8px -2px rgba(9, 9, 11, 0.06), 0 2px 4px -2px rgba(9, 9, 11, 0.04);
+  --shadow-lg: 0 12px 24px -8px rgba(9, 9, 11, 0.10), 0 4px 8px -2px rgba(9, 9, 11, 0.04);
+  --shadow-header: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+body {
+  font-family: var(--font-family-body);
+  background-color: var(--color-bg-page);
+  color: var(--color-text-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-heading);
+  color: var(--color-text-heading);
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   COMPONENT CLASSES
+   ============================================================ */
+
+.app-header {
+  background: linear-gradient(135deg, var(--color-header-bg-from) 0%, var(--color-header-bg-to) 100%);
+  color: var(--color-header-text);
+  box-shadow: var(--shadow-header);
+}
+.app-header .eyebrow {
+  color: var(--color-header-eyebrow);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.15em;
+}
+.app-header .subtitle {
+  color: var(--color-header-text-muted);
+}
+
+.summary-header {
+  background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-hover) 100%);
+  color: var(--color-text-inverse);
+}
+.summary-header .eyebrow {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.15em;
+}
+
+.surface-card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.surface-muted {
+  background-color: var(--color-bg-section);
+  border: 1px solid var(--color-border);
+}
+
+.btn-primary {
+  background-color: var(--color-btn-primary-bg);
+  color: var(--color-btn-primary-text);
+  font-weight: var(--font-weight-semibold);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-btn-primary-bg-hover);
+}
+
+.btn-secondary {
+  background-color: var(--color-btn-secondary-bg);
+  color: var(--color-btn-secondary-text);
+  border: 1px solid var(--color-btn-secondary-border);
+  font-weight: var(--font-weight-semibold);
+  transition: background-color 0.15s ease;
+}
+.btn-secondary:hover {
+  background-color: var(--color-btn-secondary-bg-hover);
+}
+
+.btn-ghost {
+  color: var(--color-btn-ghost-text);
+  font-weight: var(--font-weight-medium);
+  transition: color 0.15s ease;
+}
+.btn-ghost:hover {
+  color: var(--color-btn-ghost-text-hover);
+}
+
+.app-footer {
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
+}
