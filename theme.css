@@ -38,8 +38,8 @@
   --color-bg-muted:          #F4F4F5;
 
   /* ---------- HEADER (dark, matches ninetwothree.co) ---------- */
-  --color-header-bg-from:    #0A0A0B;
-  --color-header-bg-to:      #1F1F23;
+  --color-header-bg-from:    #6D39EF;
+  --color-header-bg-to:      #4A1DB8;
   --color-header-text:       #FFFFFF;
   --color-header-text-muted: rgba(255, 255, 255, 0.65);
   --color-header-eyebrow:    var(--color-primary);
